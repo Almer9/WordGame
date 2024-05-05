@@ -16,6 +16,18 @@ public class GameController {
     public static ResponseEntity<?> createRoom(@PathVariable String owner){
        return ResponseEntity.ok(GameService.createRoom(owner));
     }
+    @GetMapping("/getroom/{room}")
+    public static ResponseEntity<?> getRoom(@PathVariable Long room){
+        GameRoom gameRoom;
+        try {
+            gameRoom = GameService.getRoom(room);
+        }
+        catch (RuntimeException e){
+            return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        }
+
+        return ResponseEntity.ok(gameRoom);
+    }
     @PostMapping("/{room}/addplayer/{player}")
     public static ResponseEntity<?> addPlayer(@PathVariable Long room, @PathVariable String player){
         GameRoom gameRoom;

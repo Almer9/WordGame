@@ -23,6 +23,12 @@ public class GameService {
 
         return roomStorage.createRoom(owner);
     }
+    public static GameRoom getRoom(Long id){
+        if(!roomStorage.roomExists(id)){
+            throw new RuntimeException("Room with this id doesn't exist");
+        }
+        return roomStorage.getRoom(id);
+    }
     public static GameRoom addPlayer(Long gameRoomId,String player){
         GameRoom gameRoom = roomStorage.getRoom(gameRoomId);
         if(gameRoom.isStarted()){

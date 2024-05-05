@@ -7,7 +7,9 @@ import java.util.*;
 public class RoomStorage {
     private final Set<GameRoom> storageSet = new HashSet<>() {
     };
-
+    public boolean roomExists(long id){
+        return storageSet.stream().anyMatch(x -> x.getId() == id);
+    }
     public GameRoom getRoom(long id){
         return storageSet.stream().filter(x -> x.getId() == id).findFirst().orElse(null);
     }
