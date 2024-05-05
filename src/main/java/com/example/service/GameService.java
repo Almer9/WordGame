@@ -75,7 +75,6 @@ public class GameService {
         changeCurrentPlayer(gameRoom);
         if(gameRoom.getPlayers().size() == 1){
             gameRoom.setEnded(true);
-            throw new RuntimeException(String.format("Congratulations %s. You won!",gameRoom.getPlayers().get(0)));
         }
         return gameRoom;
     }

@@ -60,6 +60,9 @@ public class GameController {
         catch (RuntimeException e){
             return ResponseEntity.unprocessableEntity().body(e.getMessage());
         }
+        if(gameRoom.isEnded()){
+            return ResponseEntity.ok().body(String.format("Congratulations %s. You won!",gameRoom.getPlayers().get(0)));
+        }
         return ResponseEntity.ok(gameRoom);
     }
 
