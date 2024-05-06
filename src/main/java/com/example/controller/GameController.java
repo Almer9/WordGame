@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 public class GameController {
     @Autowired
     GameService gameService;
-    @GetMapping("/createroom/{owner}")
+    @PostMapping("/createroom/{owner}")
     public static ResponseEntity<?> createRoom(@PathVariable String owner){
        return ResponseEntity.ok(GameService.createRoom(owner));
     }
-    @GetMapping("/getroom/{room}")
+    @PostMapping("/getroom/{room}")
     public static ResponseEntity<?> getRoom(@PathVariable Long room){
         GameRoom gameRoom;
         try {
@@ -40,11 +40,11 @@ public class GameController {
 
         return ResponseEntity.ok(gameRoom);
     }
-    @PostMapping("/{room}/maketurn/{word}")
-    public static ResponseEntity<?> makeTurn(@PathVariable Long room,@PathVariable String word) {
+    @PostMapping("/{room}/maketurn/{player}/{word}")
+    public static ResponseEntity<?> makeTurn(@PathVariable Long room,@PathVariable String player, @PathVariable String word) {
         GameRoom gameRoom;
         try {
-            gameRoom = GameService.makeTurn(room, word);
+            gameRoom = GameService.makeTurn(room,player,word);
         } catch (RuntimeException e) {
             return ResponseEntity.unprocessableEntity().body(e.getMessage());
         }

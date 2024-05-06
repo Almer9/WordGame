@@ -41,8 +41,11 @@ public class GameService {
 
         return gameRoom;
     }
-    public static GameRoom makeTurn(Long gameRoomId,String word) throws RuntimeException {
+    public static GameRoom makeTurn(Long gameRoomId,String player,String word) throws RuntimeException {
         GameRoom gameRoom = roomStorage.getRoom(gameRoomId);
+        if(!gameRoom.getCurrPlayer().equals(player)){
+            throw new RuntimeException(String.format("How turn of player %s, not %s, try again", gameRoom.getCurrPlayer(),player));
+        }
         if(gameRoom.isEnded()){
             throw new RuntimeException("This game is already ended");
         }
