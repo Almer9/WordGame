@@ -7,16 +7,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("")
 public class GameController {
     @Autowired
     GameService gameService;
-    @PostMapping("/createroom/{owner}")
-    public static ResponseEntity<?> createRoom(@PathVariable String owner){
-       return ResponseEntity.ok(GameService.createRoom(owner));
+    @PostMapping("/createroom")
+    public static ResponseEntity<?> createRoom(@RequestBody Map<String,String> json){
+        try {
+            return ResponseEntity.ok(GameService.createRoom(json.get("owner")));
+        }
+        catch (ClassCastException e){
+            return ResponseEntity.unprocessableEntity().body("Passed wrong object type, try again");
+        }
+        catch (RuntimeException e){
+            return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        }
+
     }
-    @PostMapping("/getroom/{room}")
+    @GetMapping("/getroom/{room}")
     public static ResponseEntity<?> getRoom(@PathVariable Long room){
         GameRoom gameRoom;
         try {
@@ -28,34 +39,44 @@ public class GameController {
 
         return ResponseEntity.ok(gameRoom);
     }
-    @PostMapping("/{room}/addplayer/{player}")
-    public static ResponseEntity<?> addPlayer(@PathVariable Long room, @PathVariable String player){
+    @PostMapping("/addplayer/{room}")
+    public static ResponseEntity<?> addPlayer(@PathVariable Long room, @RequestBody Map<String,String> json){
         GameRoom gameRoom;
         try {
-            gameRoom = GameService.addPlayer(room,player);
+            gameRoom = GameService.addPlayer(room, json.get("player"));
         }
-        catch (RuntimeException e){
+        catch (ClassCastException e){
+            return ResponseEntity.unprocessableEntity().body("Passed wrong object type, try again");
+        }
+        catch (RuntimeException e) {
             return ResponseEntity.unprocessableEntity().body(e.getMessage());
         }
 
         return ResponseEntity.ok(gameRoom);
     }
-    @PostMapping("/{room}/maketurn/{player}/{word}")
-    public static ResponseEntity<?> makeTurn(@PathVariable Long room,@PathVariable String player, @PathVariable String word) {
+    @PostMapping("/maketurn/{room}")
+    public static ResponseEntity<?> makeTurn(@PathVariable Long room, @RequestBody Map<String,String> json) {
         GameRoom gameRoom;
         try {
-            gameRoom = GameService.makeTurn(room,player,word);
-        } catch (RuntimeException e) {
+            gameRoom = GameService.makeTurn(room, json.get("player"), json.get("word"));
+        }
+        catch (ClassCastException e){
+            return ResponseEntity.unprocessableEntity().body("Passed wrong object type, try again");
+        }
+        catch (RuntimeException e) {
             return ResponseEntity.unprocessableEntity().body(e.getMessage());
         }
 
         return ResponseEntity.ok(gameRoom);
     }
-    @PostMapping("/{room}/rejectparticipation/{player}")
-    public static ResponseEntity<?> rejectParticipation(@PathVariable Long room,@PathVariable String player){
+    @PostMapping("/rejectparticipation/{room}")
+    public static ResponseEntity<?> rejectParticipation(@PathVariable Long room, @RequestBody Map<String,String> json){
         GameRoom gameRoom;
         try {
-            gameRoom = GameService.rejectParticipation(room,player);
+            gameRoom = GameService.rejectParticipation(room, json.get("player"));
+        }
+        catch (ClassCastException e){
+            return ResponseEntity.unprocessableEntity().body("Passed wrong object type, try again");
         }
         catch (RuntimeException e){
             return ResponseEntity.unprocessableEntity().body(e.getMessage());
