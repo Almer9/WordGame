@@ -74,8 +74,8 @@ public class GameService {
         if(!gameRoom.getCurrPlayer().equals(player)){
             throw new RuntimeException("It's not this player's turn right now, try again later");
         }
-        gameRoom.getPlayers().remove(player);
         changeCurrentPlayer(gameRoom);
+        gameRoom.getPlayers().remove(player);
         if(gameRoom.getPlayers().size() == 1){
             gameRoom.setEnded(true);
         }
